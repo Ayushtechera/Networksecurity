@@ -1,4 +1,55 @@
 # ----------------------------------------Here we will design our ETL pipeline--------------------
+'''
+Our Current basic ETL pipeline include:
+CSV File
+   ↓
+Read using Pandas
+   ↓
+Convert to JSON Records
+   ↓
+Load into MongoDB Atlas
+
+
+PRODUCTION LEVEL ETL INCLUDES : 
+REST APIs
+Databases
+AWS S3
+Kafka Streams
+Logs
+User Events
+Sensors
+Third Party Sources
+   ↓
+ETL Pipeline
+   ↓
+MongoDB / Data Lake / Data Warehouse
+
+example: 
+Amazon
+↓
+User orders API
+Product API
+Payment API
+↓
+ETL
+↓
+Store
+
+OR 
+
+Netflix
+↓
+Real-time user watch events
+↓
+Kafka
+↓
+ETL
+↓
+Database
+↓
+Recommendation Model
+
+'''
 
 import os
 import sys
