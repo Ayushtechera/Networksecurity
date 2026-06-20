@@ -2,7 +2,7 @@ from networksecurity.exception.exception import NetworkSecurityException
 from networksecurity.logging.logger import logging
 from networksecurity.entity.config_entity import DataIngestionConfig
 from sklearn.model_selection import train_test_split
-from networksecurity.entity.artifact_entity import DataIngestionArtifacts
+from networksecurity.entity.artifact_entity import DataIngestionArtifact
 import pandas as pd
 import os
 import sys
@@ -25,7 +25,6 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
         
-
     # Reading data from the mongodb
     def export_collection_as_dataframe(self):
         try:
@@ -52,7 +51,6 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
 
-
     # Func to save rawData.csv into feature store artifact
     def export_data_to_feature_store(self,dataframe: pd.DataFrame):
         try:
@@ -67,7 +65,7 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
         
-    
+    # Splitting data into train and test splits 
     def split_data_as_train_test(self,dataframe: pd.DataFrame):
         try:
             train_set, test_set, = train_test_split(
@@ -94,7 +92,6 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
 
-
     # Func to initiate data ingestion 
     def initiate_data_ingestion(self):
         try:
@@ -106,7 +103,7 @@ class DataIngestion:
             self.split_data_as_train_test(dataframe)
             
             # This is our final out from Data_ingestion component 
-            dataIngestionArtifacts=DataIngestionArtifacts(
+            dataIngestionArtifacts=DataIngestionArtifact(
                 trained_file_path=self.data_ingestion_config.training_file_path,
                 test_file_path=self.data_ingestion_config.testing_file_path
             )
