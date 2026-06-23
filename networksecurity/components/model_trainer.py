@@ -25,6 +25,9 @@ from sklearn.ensemble import (
     RandomForestClassifier
 )
 
+# Dagshub is 
+import dagshub
+dagshub.init(repo_owner='Ayushtechera', repo_name='Networksecurity', mlflow=True)
 
 
 
@@ -35,7 +38,19 @@ class ModelTrainer:
             self.data_transformation_artifact = data_transformation_artifact
         except Exception as e:
             raise NetworkSecurityException(e,sys)
-        
+    
+
+    '''
+    What does MLflow do?
+
+    Experiment Tracking
+    Metrics Tracking (Accuracy, F1, Recall, etc.)
+    Hyperparameter Tracking
+    Model Versioning
+    Model Storage
+    Compare Different Runs
+    Team Collaboration
+    '''
     def track_mlflow(self,best_model,classificationmetric):
         with mlflow.start_run():
             f1_score = classificationmetric.f1_score
@@ -95,28 +110,23 @@ class ModelTrainer:
         '''
         Now Since we got the best model and best model score in model_report now we will select it 
         '''
-
         # To get a best model score from it 
         best_model_score = max(sorted(model_report.values()))
 
         # To get best model name from dict
         best_model_name = max(model_report, key=model_report.get)
-
         best_model = models[best_model_name]
 
+        # Trainign prediction
         y_train_pred = best_model.predict(X_train)
-
         classification_train_metric = get_classification_score(y_true=y_train,y_pred=y_train_pred)
-
 
         # Track the experiments with MlFlow- Is a opensource tool used to manages entire lifecycle of the ML/Datascience project projects
         self.track_mlflow(best_model,classification_train_metric)
 
-
+        # test prediction
         y_test_pred = best_model.predict(X_test)
-
         classification_test_metric = get_classification_score(y_true=y_test,y_pred=y_test_pred)
-
         self.track_mlflow(best_model,classification_test_metric)
 
         preprocessor = load_object(file_path=self.data_transformation_artifact.transformed_object_file_path)
@@ -124,8 +134,13 @@ class ModelTrainer:
         model_dir_path  = os.path.dirname(self.model_trainer_config.trained_model_file_path)
         os.makedirs(model_dir_path,exist_ok=True)
 
+        '''
+        Saving both precessor.pkl and model.pkl file in NetworkModel class
+        '''
         Network_model = NetworkModel(preprocessor=preprocessor,model=best_model)
         save_object(self.model_trainer_config.trained_model_file_path,obj=Network_model)
+
+        save_object("final_models/model.pkl",best_model)
 
         # Model Trainer Artifact
         model_trainer_artifact = ModelTrainerArtifact(
