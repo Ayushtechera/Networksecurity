@@ -27,7 +27,7 @@ from sklearn.ensemble import (
 
 # Dagshub is 
 import dagshub
-dagshub.auth.add_app_token(os.environ["DAGSHUB_USER_TOKENSHUB"])
+dagshub.auth.add_app_token(os.environ["DAGSHUB_USER_TOKEN"])
 dagshub.init(repo_owner='Ayushtechera', repo_name='Networksecurity', mlflow=True)
 
 
